@@ -79,6 +79,14 @@ async function post (
         requireAllSignatures: false,
       }));
       
-    // transaction.sign(sender);
-    // console.log(base58.encode(transaction.signature));
+    
+    const serializedTransaction = transaction.serialize({
+    verifySignatures: false,
+    requireAllSignatures: false,
+    });
+
+    const base64Transaction = serializedTransaction.toString('base64');
+    const message = 'Thank you for minting Zencyclopedia NFT and supporting Zen Republic!';
+
+    res.status(200).send({ transaction: base64Transaction, message });
 }
