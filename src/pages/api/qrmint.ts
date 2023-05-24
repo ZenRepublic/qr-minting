@@ -34,7 +34,7 @@ function get (
     req: NextApiRequest,
     res: NextApiResponse<GetData>
 ) {
-    const label = "Zencyclopedia: Ruby ";
+    const label = "Zencyclopedia: Ruby";
     const icon = "https://arweave.net/aK4k1F0nvrKW7iUuJYMbjntMTvdCtUmL2o6WtG1QqbM?ext=png";
 
     res.status(200).send({
