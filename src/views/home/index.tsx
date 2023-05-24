@@ -16,13 +16,18 @@ import { encodeURL, createQR } from "@solana/pay";
 const SOLANA_PAY_URL = "solana:https://qr-minting.vercel.app/api/qrmint";
 
 export const HomeView: FC = ({ }) => {
-  const qr = createQR(SOLANA_PAY_URL, 360, "white", "black");
-  const qrRef = useRef<HTMLDivElement>();
-  if(qrRef.current){
-    qrRef.current.innerHTML='';
-    qr.append(qrRef.current);
-    console.log("appended");
-  }
+  
+  const qrRef = useRef<HTMLDivElement>()
+  useEffect(() => {
+    const qr = createQR(SOLANA_PAY_URL, 360, 'white', 'black');
+
+    // Set the generated QR code on the QR ref element
+    if (qrRef.current) {
+      qrRef.current.innerHTML = ''
+      qr.append(qrRef.current)
+      console.log("appended");
+    } 
+  }, [])
 
   return (
 
