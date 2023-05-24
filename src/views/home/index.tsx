@@ -13,7 +13,7 @@ import pkg from '../../../package.json';
 import useUserSOLBalanceStore from '../../stores/useUserSOLBalanceStore';
 
 import { encodeURL, createQR } from "@solana/pay";
-const SOLANA_PAY_URL = "solana:192.168.1.217:3000";
+const SOLANA_PAY_URL = "solana:https://qr-minting.vercel.app/api/qrmint";
 
 export const HomeView: FC = ({ }) => {
   const wallet = useWallet();
