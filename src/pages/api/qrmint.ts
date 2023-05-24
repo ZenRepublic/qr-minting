@@ -1,6 +1,9 @@
-import { PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import { Connection, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import { error } from "console";
 import { NextApiRequest,NextApiResponse } from "next";
+
+const connection = new Connection("https://lingering-old-forest.solana-devnet.quiknode.pro/b117971e16b44a82c492776a0d5f6863a0d20993/")
+//mainnet: https://broken-radial-darkness.solana-mainnet.discover.quiknode.pro/5c8c84752133afffa3ecff9c36277ba83b49ab41/
 
 type GetData ={
     label:string,
@@ -39,7 +42,7 @@ function get (
     });
 }
 
-function post (
+async function post (
     req: NextApiRequest,
     res: NextApiResponse<PostData>
 ) {
@@ -63,4 +66,10 @@ function post (
 
     const transaction = new Transaction();
     transaction.add(ix);
+
+    const bh = await connection.getLatestBlockhash();
+    transaction.recentBlockhash = bh.blockhash;
+    transaction.feePayer = sender; 
+
+    
 }
