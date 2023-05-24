@@ -13,22 +13,9 @@ import pkg from '../../../package.json';
 import useUserSOLBalanceStore from '../../stores/useUserSOLBalanceStore';
 
 import { encodeURL, createQR } from "@solana/pay";
-const SOLANA_PAY_URL = "solana:https://qr-minting.vercel.app/";
+const SOLANA_PAY_URL = "solana:https://qr-minting.vercel.app/api/qrmint";
 
 export const HomeView: FC = ({ }) => {
-  const wallet = useWallet();
-  const { connection } = useConnection();
-
-  const balance = useUserSOLBalanceStore((s) => s.balance)
-  const { getUserSOLBalance } = useUserSOLBalanceStore()
-
-  useEffect(() => {
-    if (wallet.publicKey) {
-      console.log(wallet.publicKey.toBase58())
-      getUserSOLBalance(wallet.publicKey, connection)
-    }
-  }, [wallet.publicKey, connection, getUserSOLBalance])
-
   const qr = createQR(SOLANA_PAY_URL, 360, "white", "black");
   const qrRef = useRef<HTMLDivElement>();
   if(qrRef.current){

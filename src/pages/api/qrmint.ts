@@ -1,6 +1,7 @@
 import { Connection, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
 import { error } from "console";
 import { NextApiRequest,NextApiResponse } from "next";
+import * as base58 from "base-58";
 
 const connection = new Connection("https://lingering-old-forest.solana-devnet.quiknode.pro/b117971e16b44a82c492776a0d5f6863a0d20993/")
 //mainnet: https://broken-radial-darkness.solana-mainnet.discover.quiknode.pro/5c8c84752133afffa3ecff9c36277ba83b49ab41/
@@ -46,6 +47,7 @@ async function post (
     req: NextApiRequest,
     res: NextApiResponse<PostData>
 ) {
+
     const accountField = req.body?.account;
     if(!accountField) throw new Error("missing account.");
     
@@ -64,12 +66,19 @@ async function post (
         lamports: 100000000
     })
 
-    const transaction = new Transaction();
+    let transaction = new Transaction();
     transaction.add(ix);
 
     const bh = await connection.getLatestBlockhash();
     transaction.recentBlockhash = bh.blockhash;
     transaction.feePayer = sender; 
 
-    
+    // for correct account ordering 
+    transaction = Transaction.from(transaction.serialize({
+        verifySignatures: false,
+        requireAllSignatures: false,
+      }));
+      
+    // transaction.sign(sender);
+    // console.log(base58.encode(transaction.signature));
 }
