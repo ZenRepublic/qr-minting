@@ -68,7 +68,7 @@ async function post (
     // Usage
     const candyMachine = await fetchCandyMachine(umi, publicKey("C7VCrSsFhAetVZ8yoUDYsR84bbXbHiufc1Q6Y9hsMi2P"));
     const collectionMint = await fetchMint(umi,publicKey("CbgFxBrcJzztV8dGLv38fDRRwHqmAMWb21v94JFDDwJk"));
-    const updateAuth = publicKey("CbgFxBrcJzztV8dGLv38fDRRwHqmAMWb21v94JFDDwJk");
+    const updateAuth = publicKey("ZCPxiwhQm7TyZov5SuD16GysY9ag97vJ5sYboKUENLy");
 
     const nftMint = generateSigner(umi);
     const nftOwner = sender;
@@ -80,7 +80,7 @@ async function post (
         mintAuthority: umi.identity,
         nftOwner,
         nftMint,
-        collectionMint: collectionMint.publicKey,
+        collectionMint: publicKey("CbgFxBrcJzztV8dGLv38fDRRwHqmAMWb21v94JFDDwJk"),
         // collectionUpdateAuthority: collectionMint.metadata.updateAuthority,
         collectionUpdateAuthority: updateAuth
         })
