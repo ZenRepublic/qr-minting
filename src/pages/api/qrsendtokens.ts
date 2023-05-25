@@ -1,11 +1,10 @@
-import { Connection, PublicKey, SystemProgram, Transaction, TransactionInstruction } from '@solana/web3.js';
+import { Connection, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import { error } from "console";
 import { NextApiRequest,NextApiResponse } from "next";
 import * as base58 from "base-58";
 
 const connection = new Connection("https://lingering-old-forest.solana-devnet.quiknode.pro/b117971e16b44a82c492776a0d5f6863a0d20993/")
 //mainnet: https://broken-radial-darkness.solana-mainnet.discover.quiknode.pro/5c8c84752133afffa3ecff9c36277ba83b49ab41/
-
-const cmProgramId = new PublicKey("6hAjZ4a9K4H1VUX7sjYgxFrrhLLHLPqfgde1bjF6zmZB");
 
 type GetData ={
     label:string,
@@ -67,14 +66,8 @@ async function post (
         lamports: 100000000
     })
 
-    // Usage
-    const candyMachineId = 'C7VCrSsFhAetVZ8yoUDYsR84bbXbHiufc1Q6Y9hsMi2P';
-    const mintIxs = await mintNFT(candyMachineId,sender);
-
     let transaction = new Transaction();
-    for (let ix of mintIxs) {
-        transaction.add(ix);
-    } 
+    transaction.add(ix);
 
     const bh = await connection.getLatestBlockhash();
     transaction.recentBlockhash = bh.blockhash;
@@ -97,47 +90,3 @@ async function post (
 
     res.status(200).send({ transaction: base64Transaction, message });
 }
-
-async function mintNFT(candyMachineId: string, minterKey: PublicKey): Promise<TransactionInstruction[]> {
-
-    // Load the necessary program IDs
-    const tokenProgramId = new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
-    const candyMachineIdKey = new PublicKey(candyMachineId);
-  
-    // Generate instructions for minting NFT
-    const instructions: TransactionInstruction[] = [];
-  
-    // Add instruction to create associated token account
-    const associatedTokenAccount = await getAssociatedTokenAccount(minterKey, tokenProgramId);
-    const createAssociatedTokenAccountInstruction = SystemProgram.createAccount({
-      fromPubkey: minterKey,
-      newAccountPubkey: associatedTokenAccount,
-      lamports: await connection.getMinimumBalanceForRentExemption(165), // Account size for associated token account
-      space: 165,
-      programId: tokenProgramId,
-    });
-    instructions.push(createAssociatedTokenAccountInstruction);
-  
-    // Add instruction to mint NFT
-    const mintInstruction = new TransactionInstruction({
-        keys: [
-          // Specify the account keys required by your Candy Machine program
-          { pubkey: minterKey, isSigner: true, isWritable: false },
-          { pubkey: candyMachineIdKey, isSigner: false, isWritable: true },
-          // Additional account keys needed by your Candy Machine program
-        ],
-        programId: cmProgramId,
-      });
-      
-    instructions.push(mintInstruction);
-  
-    return instructions;
-  }
-  
-  async function getAssociatedTokenAccount(ownerPublicKey: PublicKey, tokenProgramId: PublicKey): Promise<PublicKey> {
-    const [associatedTokenAddress] = await PublicKey.findProgramAddress(
-      [ownerPublicKey.toBuffer()],
-      tokenProgramId,
-    );
-    return associatedTokenAddress;
-  }
