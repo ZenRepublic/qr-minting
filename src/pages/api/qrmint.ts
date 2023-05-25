@@ -118,18 +118,18 @@ async function mintNFT(candyMachineId: string, minterKey: PublicKey): Promise<Tr
     });
     instructions.push(createAssociatedTokenAccountInstruction);
   
-    // Add instruction to mint NFT
-    const mintInstruction = new TransactionInstruction({
-        keys: [
-          // Specify the account keys required by your Candy Machine program
-          { pubkey: minterKey, isSigner: true, isWritable: false },
-          { pubkey: candyMachineIdKey, isSigner: false, isWritable: true },
-          // Additional account keys needed by your Candy Machine program
-        ],
-        programId: cmProgramId,
-      });
+    // // Add instruction to mint NFT
+    // const mintInstruction = new TransactionInstruction({
+    //     keys: [
+    //       // Specify the account keys required by your Candy Machine program
+    //       { pubkey: minterKey, isSigner: true, isWritable: false },
+    //       { pubkey: candyMachineIdKey, isSigner: false, isWritable: true },
+    //       // Additional account keys needed by your Candy Machine program
+    //     ],
+    //     programId: cmProgramId,
+    //   });
       
-    instructions.push(mintInstruction);
+    // instructions.push(mintInstruction);
   
     return instructions;
   }
